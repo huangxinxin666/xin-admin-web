@@ -1,0 +1,21 @@
+################################  启用配置文件  ################################
+spring:
+  application:
+    name: Xin-Admin-Web
+  profiles:
+    active: dev
+
+###################  spring boot 启用actuator监控配置  ###################
+#详情参考https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/actuator-api/html/
+info:
+  head: Actuator is running
+  body: Xin-Admin-Web
+  version: Xin-Admin-Web 0.0.1-SNAPSHOT
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
