@@ -16,6 +16,7 @@ public class CommonConstants {
 		 RESULT_SUCCESS*
 		 */
 		public final static int RESULT_SUCCESS = 0;
+
 		/**
 		 * RESULT_FAILURE
 		 */
@@ -31,11 +32,12 @@ public class CommonConstants {
 		/**
 		 * RESULT_SUCCESS_MESSAGE
 		 */
-		public final static String RESULT_SUCCESS_MESSAGE = "Request is success !";
+		public final static String RESULT_SUCCESS_MESSAGE = "SUCCESS";
+
 		/**
 		 * RESULT_FAILURE_MESSAGE
 		 */
-		public final static String RESULT_FAILURE_MESSAGE = "Request is failure !";
+		public final static String RESULT_FAILURE_MESSAGE = "FAILURE";
 
 	}
 
@@ -48,6 +50,7 @@ public class CommonConstants {
 		 * IS_NOT_DELETE
 		 */
 		public final static int IS_NOT_DELETE = 0;
+
 		/**
 		 * IS_DELETE
 		 */

@@ -9,12 +9,16 @@ import com.xin.admin.common.util.HttpRequestUtils;
 import com.xin.admin.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -108,6 +112,24 @@ public class GlobalExceptionHandler {
                 item-> error.append(item.getField()).append(":").append(item.getDefaultMessage()).append("，")
         );
         return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_ERROR.setParam(error.toString().substring(0, error.length() - 1)));
+    }
+
+    /**
+     * 不支持当前请求方法(http请求验证错误)
+     */
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+        return Result.failure(ErrorCodeEnum.SYS_ERR_HTTP_METHOD_NOT_ALLOWED.setParam(e.getMessage()));
+    }
+
+    /**
+     * 不支持的媒体类型(http请求验证错误)
+     */
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public Result handleHttpMediaTypeNotSupportedException(Exception e){
+        return Result.failure(ErrorCodeEnum.SYS_ERR_HTTP_UNSUPPORTED_MEDIA_TYPE.setParam(e.getMessage()));
     }
 
     /**
