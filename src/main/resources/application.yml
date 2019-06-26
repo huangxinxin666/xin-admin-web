@@ -38,3 +38,6 @@ management:
 #  threaddump	执行一个线程dump
 #  httptrace	显示HTTP跟踪信息（默认显示最后100个HTTP请求 - 响应交换）
 
+###################  日志格式化输出配置  ###################
+custom:
+  open-log-format: false

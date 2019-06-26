@@ -15,23 +15,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 public class JsonUtils {
 
     /**
-     * 判断字符串是否是json格式
-     */
-    public static boolean isJSON(String str) {
-        try {
-            JSONObject.parseObject(str);
-        } catch (JSONException ex) {
-            try {
-                JSONObject.parseArray(str);
-            } catch (JSONException ex1) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    /**
      * 判断json是否为空
      */
     public static boolean isNotEmpty(JSONObject json) {

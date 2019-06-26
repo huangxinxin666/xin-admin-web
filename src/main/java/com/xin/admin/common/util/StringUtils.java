@@ -1,5 +1,8 @@
 package com.xin.admin.common.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 类功能描述:　String工具类
  *
@@ -8,6 +11,8 @@ package com.xin.admin.common.util;
  */
 
 public class StringUtils {
+
+    private static Pattern STRING_BLANK_PATTERN = Pattern.compile("\\s*|\t|\r|\n");
 
     /**
       * 方法功能描述: 截取字符串
@@ -39,4 +44,38 @@ public class StringUtils {
         return str.substring(strStartIndex, strEndIndex).substring(strStart.length());
     }
 
+    /**
+      * 方法功能描述: 去除字符串中的空格、回车、换行符、制表符
+      *
+      * @param str 目标字符串
+      * @return String 截取后字符串
+      */
+    public static String replaceBlank(String str) {
+        String resultStr = "";
+        if (str!=null) {
+            Matcher m = STRING_BLANK_PATTERN.matcher(str);
+            resultStr = m.replaceAll("");
+        }
+        return resultStr;
+    }
+
+    /**
+      * 方法功能描述: 判断字符串为空
+      *
+      * @param cs 目标字符串
+      * @return boolean
+      */
+    public static boolean isEmpty(CharSequence cs) {
+        return (null == cs) || ( 0 == cs.length());
+    }
+
+    /**
+     * 方法功能描述: 判断字符串不为空
+     *
+     * @param cs 目标字符串
+     * @return boolean
+     */
+    public static boolean isNotEmpty(CharSequence cs) {
+        return !isEmpty(cs);
+    }
 }

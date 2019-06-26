@@ -35,53 +35,43 @@ import java.util.List;
 @ResponseBody
 public class GlobalExceptionHandler {
 
-    private final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     /**
      * 缺少请求参数(方法级别验证错误，path)
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Result handleMissingServletRequestParameterException(MissingServletRequestParameterException e ,HttpServletRequest request)
+    public Result handleMissingServletRequestParameterException(MissingServletRequestParameterException e)
     {
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_MISSING_PARAMS.setParam(e.getParameterName()));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_MISSING_PARAMS.setParam(e.getParameterName()));
     }
 
     /**
      * 参数类型不匹配(方法级别验证错误，path)
      */
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    public Result handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletRequest request)
+    public Result handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e)
     {
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_TYPE_ERROR.setParam(e.getName(), e.getRequiredType()));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_TYPE_ERROR.setParam(e.getName(), e.getRequiredType()));
     }
 
     /**
      * 参数校验异常(方法级别验证错误，path)
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public Result pathValidationException(ConstraintViolationException e, HttpServletRequest request) {
+    public Result pathValidationException(ConstraintViolationException e) {
         // 获取报错参数名
         StackTraceElement[] stackTrace = e.getStackTrace();
         String methodName = stackTrace[3].getMethodName();
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_ERROR.setParam(e.getMessage().replace(methodName + ".", "")));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_ERROR.setParam(e.getMessage().replace(methodName + ".", "")));
     }
 
     /**
      * Json格式校验失败(实体级别单个参数验证错误，body内参数)
      */
     @ExceptionHandler(value = JsonMappingException.class)
-    public Result jsonValidationException(JsonMappingException e, HttpServletRequest request) {
+    public Result jsonValidationException(JsonMappingException e) {
         // 获取报错参数名
         StringBuilder error = new StringBuilder().append(e.getPath().get(0).getFieldName());
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_JSON_TYPE_ERROR.setParam(error));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_JSON_TYPE_ERROR.setParam(error));
     }
 
 
@@ -89,10 +79,8 @@ public class GlobalExceptionHandler {
      * Json格式校验失败(实体级别验证错误，body整体)
      */
     @ExceptionHandler(value = JsonParseException.class)
-    public Result jsonValidationException(HttpServletRequest request) {
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_BODY_JSON_TYPE_ERROR);
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+    public Result jsonValidationException() {
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_BODY_JSON_TYPE_ERROR);
     }
 
 
@@ -100,20 +88,18 @@ public class GlobalExceptionHandler {
      * 参数类型不匹配(实体级别验证错误，body内参数)
      */
     @ExceptionHandler(value = InvalidFormatException.class)
-    public Result invalidFormatException(JsonMappingException e, HttpServletRequest request) {
+    public Result invalidFormatException(JsonMappingException e) {
         // 获取报错参数名
         StringBuilder error = new StringBuilder().append(e.getPath().get(0).getFieldName());
         StringBuilder errorMsg = new StringBuilder().append(StringUtils.subString(e.getMessage(),"`","`"));
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_TYPE_ERROR.setParam(error, errorMsg));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_TYPE_ERROR.setParam(error, errorMsg));
     }
 
     /**
      * 参数校验异常(实体级别验证错误，body内参数)
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public Result bodyValidationException(MethodArgumentNotValidException e, HttpServletRequest request){
+    public Result bodyValidationException(MethodArgumentNotValidException e){
         // 获取全部报错异常信息
         BindingResult bindingResult = e.getBindingResult();
         List<FieldError> allErrors = bindingResult.getFieldErrors();
@@ -121,18 +107,14 @@ public class GlobalExceptionHandler {
         allErrors.forEach(
                 item-> error.append(item.getField()).append(":").append(item.getDefaultMessage()).append("，")
         );
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_ERROR.setParam(error.toString().substring(0, error.length() - 1)));
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+        return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_PARAMS_ERROR.setParam(error.toString().substring(0, error.length() - 1)));
     }
 
     /**
      * 全局通用异常处理
      */
     @ExceptionHandler(value = Exception.class)
-    public Result globalException(HttpServletRequest request){
-        Result result = Result.failure(ErrorCodeEnum.SYS_ERR_GLOBAL);
-        HttpRequestUtils.httpLogPrint(request,result);
-        return result;
+    public Result globalException(){
+        return Result.failure(ErrorCodeEnum.SYS_ERR_GLOBAL);
     }
 }

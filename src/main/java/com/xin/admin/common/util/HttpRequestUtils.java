@@ -1,14 +1,17 @@
 package com.xin.admin.common.util;
 
-import com.alibaba.fastjson.JSONArray;
-import com.xin.admin.common.aspect.LogAspect;
-import com.xin.admin.common.result.Result;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 类功能描述:　HttpServletRequest工具类
@@ -23,19 +26,29 @@ public class HttpRequestUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpRequestUtils.class);
 
-    public static void httpLogPrint(HttpServletRequest request, Result result){
-        String ipAddress = HttpRequestUtils.getIp(request);
-        String read = getBodyData(request);
-        String url = request.getRequestURL().toString();
-        JSONArray responses = new JSONArray();
-        responses.add(result);
-        LOG.info("请求来源: {}, 请求地址: {}", ipAddress, url);
-        LOG.info("请求参数: {}", JsonUtils.formatToJsonString(read));
-        LOG.info("响应结果: {}", JsonUtils.formatToJsonString(responses));
+    public static void httpLogPrint(ContentCachingRequestWrapper requestWrapper, ContentCachingResponseWrapper responseWrapper, long responseTime){
+        String ipAddress = getIp(requestWrapper);
+        String url = requestWrapper.getRequestURL().toString();
+        String urlQueryString = requestWrapper.getQueryString();
+        if(StringUtils.isNotEmpty(urlQueryString)){
+            url+="?"+urlQueryString;
+        }
+        String method = requestWrapper.getMethod();
+        String header = getHeader(requestWrapper);
+        String request = getPayLoad(requestWrapper.getContentAsByteArray());
+        String response = getPayLoad(responseWrapper.getContentAsByteArray());
+        LOG.info("请求来源: {}, 请求地址: {}, 请求方法: {}", LogUtils.logFormatString(ipAddress), LogUtils.logFormatString(url), LogUtils.logFormatString(method));
+        LOG.info("请求头部: {}", LogUtils.logFormatJsonString(header));
+        if(method.equals(HttpMethod.POST.toString()) || method.equals(HttpMethod.PUT.toString())){
+            LOG.info("请求参数: {}", LogUtils.logFormatJsonString(request));
+        }
+        LOG.info("响应结果: {}", LogUtils.logFormatJsonString(response));
+        LOG.info("执行时间: {}", LogUtils.logFormatString(String.valueOf(responseTime) + "ms"));
     }
 
+
     /**
-     * 获取目标主机的ip
+     * 获取IP
      */
     public static String getIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
@@ -51,19 +64,36 @@ public class HttpRequestUtils {
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
     }
 
-    private static  String getBodyData(HttpServletRequest request) {
-        StringBuffer data = new StringBuffer();
-        String line = null;
-        BufferedReader reader = null;
-        try {
-            reader = request.getReader();
-            while (null != (line = reader.readLine())) {
-                data.append(line);
-            }
-        } catch (IOException e) {
-        } finally {
+    /**
+     * 获取Header
+     */
+    private static String getHeader(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>(16);
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            map.put(key, value);
         }
-        return data.toString();
+        return JSONObject.toJSONString(map);
+    }
+
+    /**
+     * 获取Body
+     */
+    private static String getPayLoad(byte[] buf) {
+        String payload = "";
+        if (null == buf) {
+            return payload;
+        }
+        if (buf.length > 0) {
+            try {
+                payload = new String(buf, 0, buf.length, Charsets.UTF_8);
+            } catch (Exception ex) {
+                payload = "[unknown]";
+            }
+        }
+        return payload;
     }
 
 }
