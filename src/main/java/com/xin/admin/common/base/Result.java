@@ -1,8 +1,8 @@
-package com.xin.admin.common.result;
+package com.xin.admin.common.base;
 
 
 import com.xin.admin.common.constant.CommonConstants;
-import com.xin.admin.common.enumeration.ErrorCodeEnum;
+import com.xin.admin.common.enums.ErrorCodeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

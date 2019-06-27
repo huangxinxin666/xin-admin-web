@@ -1,20 +1,17 @@
 package com.xin.admin.sys.controller;
 
 
-import com.xin.admin.common.result.Result;
+import com.xin.admin.common.base.Result;
 import com.xin.admin.sys.entity.Demo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 
 /**

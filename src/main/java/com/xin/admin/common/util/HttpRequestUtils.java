@@ -2,11 +2,6 @@ package com.xin.admin.common.util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -23,29 +18,6 @@ import java.util.Map;
 public class HttpRequestUtils {
 
     private static final String UNKNOWN_IP= "unknown";
-
-    private static final Logger LOG = LoggerFactory.getLogger(HttpRequestUtils.class);
-
-    public static void httpLogPrint(ContentCachingRequestWrapper requestWrapper, ContentCachingResponseWrapper responseWrapper, long responseTime){
-        String ipAddress = getIp(requestWrapper);
-        String url = requestWrapper.getRequestURL().toString();
-        String urlQueryString = requestWrapper.getQueryString();
-        if(StringUtils.isNotEmpty(urlQueryString)){
-            url+="?"+urlQueryString;
-        }
-        String method = requestWrapper.getMethod();
-        String header = getHeader(requestWrapper);
-        String request = getPayLoad(requestWrapper.getContentAsByteArray());
-        String response = getPayLoad(responseWrapper.getContentAsByteArray());
-        LOG.info("请求来源: {}, 请求地址: {}, 请求方法: {}", LogUtils.logFormatString(ipAddress), LogUtils.logFormatString(url), LogUtils.logFormatString(method));
-        LOG.info("请求头部: {}", LogUtils.logFormatJsonString(header));
-        if(method.equals(HttpMethod.POST.toString()) || method.equals(HttpMethod.PUT.toString())){
-            LOG.info("请求参数: {}", LogUtils.logFormatJsonString(request));
-        }
-        LOG.info("响应结果: {}", LogUtils.logFormatJsonString(response));
-        LOG.info("执行时间: {}", LogUtils.logFormatString(String.valueOf(responseTime) + "ms"));
-    }
-
 
     /**
      * 获取IP
@@ -67,7 +39,7 @@ public class HttpRequestUtils {
     /**
      * 获取Header
      */
-    private static String getHeader(HttpServletRequest request) {
+    public static String getHeader(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>(16);
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -81,7 +53,7 @@ public class HttpRequestUtils {
     /**
      * 获取Body
      */
-    private static String getPayLoad(byte[] buf) {
+    public static String getPayLoad(byte[] buf) {
         String payload = "";
         if (null == buf) {
             return payload;

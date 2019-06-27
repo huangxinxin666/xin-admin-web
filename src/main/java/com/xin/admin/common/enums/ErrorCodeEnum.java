@@ -1,4 +1,4 @@
-package com.xin.admin.common.enumeration;
+package com.xin.admin.common.enums;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

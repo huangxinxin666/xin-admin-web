@@ -3,12 +3,9 @@ package com.xin.admin.common.exception;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.xin.admin.common.enumeration.ErrorCodeEnum;
-import com.xin.admin.common.result.Result;
-import com.xin.admin.common.util.HttpRequestUtils;
+import com.xin.admin.common.enums.ErrorCodeEnum;
+import com.xin.admin.common.base.Result;
 import com.xin.admin.common.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 import java.util.List;

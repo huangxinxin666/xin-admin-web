@@ -1,5 +1,6 @@
 package com.xin.admin.config;
 
+
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,15 @@ import org.springframework.stereotype.Component;
  * @author Eternal
  * @date 2019/6/26 17:58
  */
-@Component("CustomPropertiesConfig")
-@ConfigurationProperties(prefix = "custom")
+@Component
+@ConfigurationProperties(prefix = "personal")
 @Data
-public class CustomPropertiesConfig {
+public class PersonalPropertiesConfig {
 
-    private Boolean openLogFormat;
+    private boolean accessLogFilterEnable = true;
+
+    private boolean logFormatEnable = false;
+
+    private boolean swaggerEnable = true;
 
 }

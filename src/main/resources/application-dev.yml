@@ -73,3 +73,9 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
+
+###################  自定义配置  ###################
+personal:
+  access-log-filter-enable: true
+  log-format-enable: true
+  swagger-enable: true

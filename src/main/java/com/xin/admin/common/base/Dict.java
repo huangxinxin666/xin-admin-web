@@ -1,4 +1,4 @@
-package com.xin.admin.common.dictionary;
+package com.xin.admin.common.base;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

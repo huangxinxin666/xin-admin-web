@@ -1,7 +1,7 @@
 package com.xin.admin.sys.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xin.admin.common.enumeration.SexEnum;
+import com.xin.admin.common.enums.SexEnum;
 import com.xin.admin.common.validator.ValidDict;
 import com.xin.admin.common.validator.ValidEnum;
 import com.xin.admin.common.validator.ValidJson;

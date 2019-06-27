@@ -1,6 +1,6 @@
 package com.xin.admin.common.validator;
 
-import com.xin.admin.common.dictionary.Dict;
+import com.xin.admin.common.base.Dict;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
