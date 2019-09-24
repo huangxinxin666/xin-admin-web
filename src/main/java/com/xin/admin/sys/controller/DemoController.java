@@ -40,7 +40,7 @@ public class DemoController {
     @GetMapping("/validate1")
     @ResponseBody
     public String validate1(
-            @Size(min = 1,max = 10,message = "姓名长度必须为1到10")                              @RequestParam("name") String name,
+            @Size(min = 1,max = 10,message = "姓名长度必须为1到10") @RequestParam("name") String name,
             @Min(value = 10,message = "年龄最小为10") @Max(value = 100,message = "年龄最大为100") @RequestParam("age") Integer age){
         return "validate1";
     }

@@ -1,12 +1,12 @@
 package com.xin.admin.common.exception;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.xin.admin.common.enums.ErrorCodeEnum;
 import com.xin.admin.common.base.Result;
+import com.xin.admin.common.enums.ErrorCodeEnum;
 import com.xin.admin.common.util.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -14,13 +14,11 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
-
 import java.util.List;
 
 
@@ -32,7 +30,6 @@ import java.util.List;
  */
 
 @RestControllerAdvice
-@ResponseBody
 public class GlobalExceptionHandler {
 
     /**
@@ -78,7 +75,7 @@ public class GlobalExceptionHandler {
     /**
      * Json格式校验失败(实体级别验证错误，body整体)
      */
-    @ExceptionHandler(value = JsonParseException.class)
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public Result jsonValidationException() {
         return Result.failure(ErrorCodeEnum.SYS_ERR_VALIDATION_BODY_JSON_TYPE_ERROR);
     }
@@ -132,7 +129,7 @@ public class GlobalExceptionHandler {
      * 全局通用异常处理
      */
     @ExceptionHandler(value = Exception.class)
-    public Result globalException(){
+    public Result globalException(Exception e){
         return Result.failure(ErrorCodeEnum.SYS_ERR_GLOBAL);
     }
 }

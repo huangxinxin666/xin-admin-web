@@ -3,7 +3,7 @@
 
     <contextName>logback</contextName>
     <!-- 定义日志文件的存储地址 -->
-    <property name="log.path" value="D:/demo/logs" />
+    <property name="log.path" value="F:/logs" />
 
     <!-- 彩色日志 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
